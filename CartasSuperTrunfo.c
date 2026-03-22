@@ -1,12 +1,11 @@
 #include <stdio.h>
+#include <string.h>
 
 // Desafio Super Trunfo - Cidades
-// Inserindo os dados de duas cidades e calculando a densidade populacional e o PIB per capita para cada cidade, além de exibir todas as informações.
-// Calculando super poder e decidindo atributo vencedor de cada carta
 
 int main() {
-    char estadoCidade1, estadoCidade2;
-    char codigoCidade1[3], codigoCidade2[3];
+    char estadoCidade1[3], estadoCidade2[3];
+    char codigoCidade1[4], codigoCidade2[4];
     char nomeCidade1[20], nomeCidade2[20];
     unsigned long int populacaoCidade1, populacaoCidade2;
     float areaCidade1, areaCidade2;
@@ -17,12 +16,17 @@ int main() {
     unsigned long int superPoderCidade1, superPoderCidade2;
 
     // Leitura dos dados da Cidade 1
-    printf("Digite o estado da Cidade 1 (Letra): ");
-    scanf(" %c", &estadoCidade1);
+    printf("Digite o estado da Cidade: ");
+    scanf("%s", estadoCidade1);
     printf("Digite o código da Cidade 1 (3 caracteres): ");
     scanf("%s", codigoCidade1);
     printf("Digite o nome da Cidade 1: ");
-    scanf("%s", nomeCidade1);
+    // ler string de forma segura, mesmo quando tiver espaços, usando fgets e removendo o newline
+    getchar(); // Limpar o buffer do teclado antes de usar fgets
+    fgets(nomeCidade1, sizeof(nomeCidade1), stdin);
+    // Remover o newline do final da string
+    nomeCidade1[strcspn(nomeCidade1, "\n")] = '\0';    
+    
     printf("Digite a população da Cidade 1: ");
     scanf("%lu", &populacaoCidade1);
     printf("Digite a área da Cidade 1 (em km²): ");
@@ -33,12 +37,17 @@ int main() {
     scanf("%d", &pontosCidade1);
 
     // Leitura dos dados da Cidade 2
-    printf("Digite o estado da Cidade 2 (Letra): ");
-    scanf(" %c", &estadoCidade2);
+    printf("Digite o estado da Cidade 2: ");
+    scanf("%s", estadoCidade2);
     printf("Digite o código da Cidade 2 (3 caracteres): ");
     scanf("%s", codigoCidade2);
     printf("Digite o nome da Cidade 2: ");
-    scanf("%s", nomeCidade2);
+    // ler string de forma segura, mesmo quando tiver espaços, usando fgets e removendo o newline
+    getchar(); // Limpar o buffer do teclado antes de usar fgets
+    fgets(nomeCidade2, sizeof(nomeCidade2), stdin);
+    // Remover o newline do final da string
+    nomeCidade2[strcspn(nomeCidade2, "\n")] = '\0';
+
     printf("Digite a população da Cidade 2: ");
     scanf("%lu", &populacaoCidade2);
     printf("Digite a área da Cidade 2 (em km²): ");
@@ -54,9 +63,113 @@ int main() {
     pibPerCapitaCidade1 = (float) (PIBCidade1 * 1000000000) / populacaoCidade1;
     pibPerCapitaCidade2 = (float) (PIBCidade2 * 1000000000) / populacaoCidade2;
     // Para o super poder, vamos usar a soma da população, area, PIB per capita e pontos turísticos e o inverso da densidade populacional (1/densidade) para criar um valor único que representa a cidade.
-    superPoderCidade1 = populacaoCidade1 + areaCidade1 + pibPerCapitaCidade1 + pontosCidade1 + (1.0f / densidadePopulacionalCidade1);
-    superPoderCidade2 = populacaoCidade2 + areaCidade2 + pibPerCapitaCidade2 + pontosCidade2 + (1.0f / densidadePopulacionalCidade2);
+    //superPoderCidade1 = populacaoCidade1 + areaCidade1 + pibPerCapitaCidade1 + pontosCidade1 + (1.0f / densidadePopulacionalCidade1);
+    //superPoderCidade2 = populacaoCidade2 + areaCidade2 + pibPerCapitaCidade2 + pontosCidade2 + (1.0f / densidadePopulacionalCidade2);
 
+    // Mostrar opções para o usuário escolher qual atributo comparar entre as duas cidades
+    printf("\nEscolha um atributo para comparar as cartas (1-6):\n");
+    printf("1. População\n");
+    printf("2. Área\n");
+    printf("3. PIB\n");
+    printf("4. Pontos turísticos\n");
+    printf("5. Densidade populacional\n");
+    printf("6. PIB per capita\n");
+
+    // Variáveis para armazenar o resultado da comparação    
+    int atributoEscolhido, cartaVencedora;
+    float pontosVencedor;
+
+    // Leitura do atributo escolhido pelo usuário
+    scanf("%d", &atributoEscolhido);
+
+    // Comparação dos atributos escolhidos e determinação do vencedor
+    if (atributoEscolhido == 1) {
+        if (populacaoCidade1 > populacaoCidade2) {
+            cartaVencedora = 1;
+            pontosVencedor = populacaoCidade1;   
+        }
+        else if (populacaoCidade2 > populacaoCidade1) {
+            cartaVencedora = 2;
+            pontosVencedor = populacaoCidade2;   
+        } else {
+            cartaVencedora = 0; // Empate
+            pontosVencedor = populacaoCidade1; // Ambos têm a mesma população
+        }
+    }
+    else if (atributoEscolhido == 2) {
+        if (areaCidade1 > areaCidade2) {
+            cartaVencedora = 1;
+            pontosVencedor = areaCidade1;
+        } else if (areaCidade2 > areaCidade1) {
+            cartaVencedora = 2;
+            pontosVencedor = areaCidade2;
+        } else {
+            cartaVencedora = 0;
+            pontosVencedor = areaCidade1;
+        }
+    }
+    else if (atributoEscolhido == 3) {
+        if (PIBCidade1 > PIBCidade2) {
+            cartaVencedora = 1;
+            pontosVencedor = PIBCidade1;
+        } else if (PIBCidade2 > PIBCidade1) {
+            cartaVencedora = 2;
+            pontosVencedor = PIBCidade2;
+        } else {
+            cartaVencedora = 0;
+            pontosVencedor = PIBCidade1;
+        }
+    }
+    else if (atributoEscolhido == 4) {
+        if (pontosCidade1 > pontosCidade2) {
+            cartaVencedora = 1;
+            pontosVencedor = pontosCidade1;
+        } else if (pontosCidade2 > pontosCidade1) {
+            cartaVencedora = 2;
+            pontosVencedor = pontosCidade2;
+        } else {
+            cartaVencedora = 0;
+            pontosVencedor = pontosCidade1;
+        }
+    }
+    else if (atributoEscolhido == 5) {
+        if (densidadePopulacionalCidade1 < densidadePopulacionalCidade2) {
+            cartaVencedora = 1;
+            pontosVencedor = densidadePopulacionalCidade1;
+        } else if (densidadePopulacionalCidade2 < densidadePopulacionalCidade1) {
+            cartaVencedora = 2;
+            pontosVencedor = densidadePopulacionalCidade2;
+        } else {
+            cartaVencedora = 0;
+            pontosVencedor = densidadePopulacionalCidade1;
+        }
+    }
+    else if (atributoEscolhido == 6) {
+        if (pibPerCapitaCidade1 > pibPerCapitaCidade2) {
+            cartaVencedora = 1;
+            pontosVencedor = pibPerCapitaCidade1;
+        } else if (pibPerCapitaCidade2 > pibPerCapitaCidade1) {
+            cartaVencedora = 2;
+            pontosVencedor = pibPerCapitaCidade2;
+        } else {
+            cartaVencedora = 0;
+            pontosVencedor = pibPerCapitaCidade1;
+        }
+    } else {
+        printf("Atributo inválido. Por favor, escolha um número entre 1 e 6.\n");
+        return 1; // Encerra o programa com código de erro
+    }
+    
+    // Exibição do resultado da comparação
+    if (cartaVencedora == 1) {
+        printf("A cidade vencedora é: %s (%s) com %.2f pontos!\n", nomeCidade1, estadoCidade1, pontosVencedor);
+    } else if (cartaVencedora == 2) {
+        printf("A cidade vencedora é: %s (%s) com %.2f pontos!\n", nomeCidade2, estadoCidade2, pontosVencedor);
+    } else {
+        printf("Empate! Ambas as cidades têm %.2f pontos para o atributo escolhido.\n", pontosVencedor);
+    }
+    
+/*
     // Exibição dos dados da cidade 1
     printf("\nCarta 1:\n");
     printf("Estado: %c\n", estadoCidade1);
@@ -92,6 +205,6 @@ int main() {
     printf("Densidade populacional: Carta 1 venceu (%d)\n", densidadePopulacionalCidade1 < densidadePopulacionalCidade2);
     printf("PIB per capita: Carta 1 venceu (%d)\n", pibPerCapitaCidade1 > pibPerCapitaCidade2);
     printf("Super Poder: Carta 1 venceu (%d)\n", superPoderCidade1 > superPoderCidade2);
-
+*/
     return 0;
 }
